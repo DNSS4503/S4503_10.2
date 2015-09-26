@@ -3,18 +3,8 @@
 #AUDIO_POLICY_TEST := true
 #ENABLE_AUDIO_DUMP := true
 
+TARGET_HAS_QACT := true
 LOCAL_PATH := $(call my-dir)
-
-include $(CLEAR_VARS)
-LOCAL_COPY_HEADERS_TO   := mm-audio/audcal
-LOCAL_COPY_HEADERS      := /initialize_audcal8x25.h
-include $(BUILD_COPY_HEADERS)
-
-include $(CLEAR_VARS)
-LOCAL_COPY_HEADERS_TO   := mm-audio/audio-alsa
-LOCAL_COPY_HEADERS      := /control.h
-include $(BUILD_COPY_HEADERS)
-
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
@@ -59,6 +49,9 @@ LOCAL_SHARED_LIBRARIES += libdl
 endif
 
 ifeq ($(strip $(TARGET_HAS_QACT)),true)
+$(shell mkdir -p $(OUT)/obj/SHARED_LIBRARIES/libaudcal_intermediates/)
+$(shell touch $(OUT)/obj/SHARED_LIBRARIES/libaudcal_intermediates/export_includes)
+
 LOCAL_SHARED_LIBRARIES += libaudcal
 endif
 
@@ -66,14 +59,16 @@ LOCAL_STATIC_LIBRARIES := \
     libmedia_helper \
     libaudiohw_legacy
 
-LOCAL_MODULE := audio.primary.msm7x27a
+LOCAL_MODULE := audio.primary.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE_TAGS := optional
 
 LOCAL_CFLAGS += -fno-short-enums
 
 LOCAL_C_INCLUDES := $(TARGET_OUT_HEADERS)/mm-audio/audio-alsa
+ifeq ($(strip $(TARGET_HAS_QACT)),true)
 LOCAL_C_INCLUDES += $(TARGET_OUT_HEADERS)/mm-audio/audcal
+endif
 LOCAL_C_INCLUDES += hardware/libhardware/include
 LOCAL_C_INCLUDES += hardware/libhardware_legacy/include
 LOCAL_C_INCLUDES += frameworks/base/include
@@ -101,7 +96,7 @@ LOCAL_STATIC_LIBRARIES := \
     libmedia_helper \
     libaudiopolicy_legacy
 
-LOCAL_MODULE := audio_policy.msm7x27a
+LOCAL_MODULE := audio_policy.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE_TAGS := optional
 
@@ -115,12 +110,3 @@ LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
 LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
 
 include $(BUILD_SHARED_LIBRARY)
-
-# Load audio_policy.conf to system/etc/
-include $(CLEAR_VARS)
-LOCAL_MODULE       := audio_policy.conf
-LOCAL_MODULE_TAGS  := optional
-LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_PATH  := $(TARGET_OUT_ETC)
-LOCAL_SRC_FILES    := audio_policy.conf
-include $(BUILD_PREBUILT)

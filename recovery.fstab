@@ -1,0 +1,16 @@
+/dev/block/platform/msm_sdcc.3/by-num/p9	/boot				emmc	defaults																	defaults
+/dev/block/platform/msm_sdcc.3/by-num/p17	/recovery			emmc	defaults																	defaults
+/dev/block/platform/msm_sdcc.3/by-num/p8	/misc				emmc	defaults																	defaults	
+/dev/block/platform/msm_sdcc.3/by-num/p14	/system				ext4	ro,barrier=1,noatime,data=ordered											wait
+/dev/block/platform/msm_sdcc.3/by-num/p20	/data				ext4	noatime,nosuid,nodev,barrier=1,data=ordered,noauto_da_alloc,errors=continue wait
+/dev/block/platform/msm_sdcc.3/by-num/p16	/cache				ext4	noatime,nosuid,nodev,barrier=1,data=ordered									wait	
+
+# SD Card
+/dev/block/mmcblk1p1		          	   	/external_sd  		auto	defaults																	defaults
+/dev/block/mmcblk1p2						/sd-ext				auto	defaults																	defaults
+
+
+
+
+
+

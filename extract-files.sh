@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export VENDOR=nokia
-export DEVICE=normandy
+export VENDOR=lge
+export DEVICE=p710
 
 if [ $# -eq 1 ]; then
     COPY_FROM=$1
@@ -13,7 +13,7 @@ test -z "$VENDOR" && echo vendor not set && exit 2
 test -z "$VENDORDEVICEDIR" && VENDORDEVICEDIR=$DEVICE
 export VENDORDEVICEDIR
 
-BASE=../../../vendor/$VENDOR/$VENDORDEVICEDIR/proprietary
+BASE=../../../vendor/$VENDOR/$VENDORDEVICEDIR
 rm -rf $BASE/*
 
 for FILE in `egrep -v '(^#|^$)' ../$DEVICE/proprietary-files.txt`; do

@@ -1,2 +1,3 @@
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/full_dns.mk
+    $(LOCAL_DIR)full_dns.mk
+

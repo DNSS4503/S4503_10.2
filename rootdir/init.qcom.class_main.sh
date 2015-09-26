@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2012, Code Aurora Forum. All rights reserved.
+# Copyright (c) 2012, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -8,7 +8,7 @@
 #     * Redistributions in binary form must reproduce the above copyright
 #       notice, this list of conditions and the following disclaimer in the
 #       documentation and/or other materials provided with the distribution.
-#     * Neither the name of Code Aurora nor
+#     * Neither the name of The Linux Foundation nor
 #       the names of its contributors may be used to endorse or promote
 #       products derived from this software without specific prior written
 #       permission.
@@ -32,6 +32,7 @@
 baseband=`getprop ro.baseband`
 multirild=`getprop ro.multi.rild`
 netmgr=`getprop ro.use_data_netmgrd`
+dsds=`getprop persist.multisim.config`
 
 case "$baseband" in
     "apq")
@@ -47,12 +48,10 @@ case "$baseband" in
         start qmiproxy
     esac
 
- Comment the following lines for we do the same thing in init.qcom.ril.path.sh
     case "$multirild" in
         "true")
          case "$dsds" in
-             "true")
-             start ril-daemon
+             "dsds")
              start ril-daemon1
          esac
     esac

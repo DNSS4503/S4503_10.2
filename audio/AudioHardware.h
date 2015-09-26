@@ -1,6 +1,6 @@
 /*
 ** Copyright 2008, The Android Open-Source Project
-** Copyright (c) 2011-2012, The Linux Foundation. All rights reserved.
+** Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ using android::Condition;
 #define MBADRC_DISABLE 0xFFEF
 #define SRS_ENABLE 0x0020
 #define SRS_DISABLE 0xFFDF
-#define LPA_BUFFER_SIZE 480*1024
+#define LPA_BUFFER_SIZE 512*1024
 #define BUFFER_COUNT 2
 
 #define AGC_ENABLE     0x0001
@@ -238,7 +238,7 @@ public:
 #endif
 protected:
     virtual status_t    dump(int fd, const Vector<String16>& args);
-    uint32_t getMvsMode(int format, int rate);
+    uint32_t getMvsMode(int format);
     uint32_t getMvsRateType(uint32_t MvsMode, uint32_t *rateType);
     status_t setupDeviceforVoipCall(bool value);
 
@@ -270,7 +270,7 @@ private:
                                 uint32_t *pChannels,
                                 uint32_t *pRate);
         virtual uint32_t sampleRate() const {
-            char af_quality[PROPERTY_VALUE_MAX];
+            char af_quality[32];
             property_get("af.resampler.quality",af_quality,"0");
             if(strcmp("255",af_quality) == 0) {
                 ALOGD("SampleRate 48k");
@@ -281,7 +281,7 @@ private:
             }
         }
         virtual size_t bufferSize() const {
-            char af_quality[PROPERTY_VALUE_MAX];
+            char af_quality[32];
             property_get("af.resampler.quality",af_quality,"0");
             if(strcmp("255",af_quality) == 0) {
                 ALOGD("Bufsize 5248");
@@ -414,7 +414,7 @@ public:
     virtual status_t    getBufferInfo(buf_info **buf);
     virtual status_t    isBufferAvailable(int *isAvail);
 
-	void* memBufferAlloc(int nSize, int32_t *ion_fd);
+    void* memBufferAlloc(int nSize, int32_t *ion_fd);
 
 private:
     Mutex               mLock;
@@ -572,7 +572,6 @@ private:
         virtual unsigned int  getInputFramesLost() const { return 0; }
                 uint32_t    devices() { return mDevices; }
                 int         state() const { return mState; }
-                bool        mSetupDevice;
 
     private:
                 AudioHardware* mHardware;
@@ -626,7 +625,6 @@ private:
             bool mVoipInActive;
             bool mVoipOutActive;
             Mutex       mVoipLock;
-            int         mDirectOutrefCnt;
 #endif /*QCOM_VOIP_ENABLED*/
      friend class AudioStreamInMSM72xx;
             Mutex       mLock;
